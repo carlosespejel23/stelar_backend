@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:16-alpine:///stellar_test
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+  flyway:
+    enabled: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  mail:
+    host: localhost
+    port: 1025
+    properties:
+      "[mail.smtp.auth]": false
+      "[mail.smtp.starttls.enable]": false
+
+app:
+  jwt:
+    secret: dGVzdC1zZWNyZXQta2V5LXRoYXQtaXMtbG9uZy1lbm91Z2gtZm9yLXRlc3Rpbmctb25seQ==
+    access-token-expiration: 900000
+    refresh-token-expiration: 604800000
+  email:
+    verification-token-expiration: 86400
+    reset-token-expiration: 86400
+    from: test@stellar.academy
+  frontend-url: http://localhost:3000
+
+logging:
+  level:
+    com.academic.stellar: WARN
+    org.flywaydb: WARN
