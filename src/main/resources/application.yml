@@ -1,0 +1,154 @@
+spring:
+  application:
+    name: stellar
+  profiles:
+    active: dev
+
+  # JPA
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        "[format_sql]": true
+    show-sql: false
+
+  # Flyway
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+
+  # Jackson
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+# SpringDoc / OpenAPI
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+
+# Application-level config
+app:
+  jwt:
+    secret: ${JWT_SECRET:yXIw5EPcDizjH1hHY8pKaxdnlxvwS3G30yIU56LC44X}
+    access-token-expiration: 900000        # 15 min en ms
+    refresh-token-expiration: 604800000    # 7 días en ms
+  email:
+    verification-token-expiration: 86400   # 24 horas en segundos
+    reset-token-expiration: 86400          # 24 horas en segundos
+    from: ${MAIL_FROM:noreply@stellar.academy}
+  frontend-url: ${FRONTEND_URL:http://localhost:8081}
+
+---
+# ===== PROFILE: dev =====
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:stellar_dev}
+    username: ${DB_USER:stellar}
+    password: ${DB_PASSWORD:stellar}
+    hikari:
+      maximum-pool-size: 5
+      pool-name: stellar-pool-dev
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      repositories:
+        enabled: false
+
+  mail:
+    host: ${MAIL_HOST:localhost}
+    port: ${MAIL_PORT:1025}
+    properties:
+      "[mail.smtp.auth]": false
+      "[mail.smtp.starttls.enable]": false
+
+  jpa:
+    #show-sql: true
+    properties:
+      hibernate:
+        #generate_statistics: true
+
+logging:
+  level:
+    "[com.academic.stellar]": DEBUG
+    #"[org.hibernate.SQL]": DEBUG
+    #"[org.hibernate.stat]": DEBUG
+    #"[org.hibernate.engine.internal.StatisticalLoggingSessionEventListener]": INFO
+
+---
+# ===== PROFILE: test =====
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  flyway:
+    enabled: true
+
+  jpa:
+    show-sql: false
+
+  mail:
+    host: localhost
+    port: 1025
+    properties:
+      "[mail.smtp.auth]": false
+      "[mail.smtp.starttls.enable]": false
+
+logging:
+  level:
+    "[com.academic.stellar]": INFO
+
+---
+# ===== PROFILE: prod =====
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT:5432}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      pool-name: stellar-pool-prod
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+
+  jpa:
+    show-sql: false
+
+# AWS — credenciales opcionales (si no se definen, usa DefaultCredentialsProvider: IAM role / env vars)
+aws:
+  region: ${AWS_REGION:us-east-1}
+  access-key-id: ${AWS_ACCESS_KEY_ID:}
+  secret-access-key: ${AWS_SECRET_ACCESS_KEY:}
+
+logging:
+  level:
+    "[com.academic.stellar]": INFO
+    root: WARN
