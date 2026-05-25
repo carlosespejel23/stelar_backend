@@ -1,6 +1,6 @@
 spring:
   application:
-    name: stellar
+    name: stelar
   profiles:
     active: dev
 
@@ -45,7 +45,7 @@ app:
   email:
     verification-token-expiration: 86400   # 24 horas en segundos
     reset-token-expiration: 86400          # 24 horas en segundos
-    from: ${MAIL_FROM:noreply@stellar.academy}
+    from: ${MAIL_FROM:noreply@stelar.education}
   frontend-url: ${FRONTEND_URL:http://localhost:8081}
 
 ---
@@ -56,12 +56,12 @@ spring:
       on-profile: dev
 
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:stellar_dev}
-    username: ${DB_USER:stellar}
-    password: ${DB_PASSWORD:stellar}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:stelar_dev}
+    username: ${DB_USER:stelar}
+    password: ${DB_PASSWORD:stelar}
     hikari:
       maximum-pool-size: 5
-      pool-name: stellar-pool-dev
+      pool-name: stelar-pool-dev
 
   data:
     redis:
@@ -128,7 +128,7 @@ spring:
     hikari:
       maximum-pool-size: 20
       minimum-idle: 5
-      pool-name: stellar-pool-prod
+      pool-name: stelar-pool-prod
       connection-timeout: 30000
       idle-timeout: 600000
       max-lifetime: 1800000

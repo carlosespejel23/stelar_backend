@@ -1,5 +1,6 @@
 package com.education.stelar.identity.service;
 
+import com.education.stelar.identity.entity.Permission;
 import com.education.stelar.identity.entity.User;
 import com.education.stelar.identity.entity.UserTenant;
 import com.education.stelar.kernel.security.UserPrincipal;
@@ -9,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -50,9 +52,16 @@ public class UserDetailsImpl implements UserDetails, UserPrincipal {
     }
 
     public static UserDetailsImpl build(User user, UserTenant userTenant) {
-        List<GrantedAuthority> authorities = userTenant.getRole() != null
-                ? List.of(new SimpleGrantedAuthority("ROLE_" + userTenant.getRole().getName()))
-                : List.of();
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        if (userTenant.getRole() != null) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + userTenant.getRole().getName()));
+
+            userTenant.getRole().getPermissions().stream()
+                    .filter(Permission::isActive)
+                    .map(p -> new SimpleGrantedAuthority(p.getCode()))
+                    .forEach(authorities::add);
+        }
 
         return new UserDetailsImpl(
                 user.getId(),
