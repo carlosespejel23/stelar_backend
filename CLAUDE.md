@@ -208,12 +208,12 @@ POST   /api/v1/students               # Registrar estudiante
 GET    /api/v1/students/{id}          # Perfil completo
 GET    /api/v1/students/{id}/dashboard # Dashboard individual
 
-# Asistencia (nota: usa /assistance en el backend)
-POST   /api/v1/assistance             # Registrar asistencia
-POST   /api/v1/assistance/batch       # Pase de lista completo
-GET    /api/v1/assistance/student/{id} # Historial por estudiante
-GET    /api/v1/assistance/subject/{id} # Historial por materia
-GET    /api/v1/assistance/group/{id}   # Historial por grupo
+# Asistencia
+POST   /api/v1/attendance             # Registrar asistencia
+POST   /api/v1/attendance/batch       # Pase de lista completo
+GET    /api/v1/attendance/student/{id} # Historial por estudiante
+GET    /api/v1/attendance/subject/{id} # Historial por materia
+GET    /api/v1/attendance/group/{id}   # Historial por grupo
 
 # Calificaciones
 POST   /api/v1/grades                 # Registrar calificación
